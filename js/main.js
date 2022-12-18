@@ -57,6 +57,104 @@ function toTitleCase(str) {
     }).join(' ');
 }
 
+// HTML Templates
+const errorTemplate = `
+    <div class="card col-4 py-3 gap-1 shadow-lg rounded">
+        <h2><strong>Oops!</strong></h2>
+        <p>Looks like there was an error, please try again with a different search query.</p>
+    </div>
+`
+
+function locationTemplate(cityName, country) {
+    return `
+        <div class="card col-4 py-3 gap-1 shadow-lg rounded">
+            <h2><strong>${cityName}</strong></h2>
+            <p>Country: &nbsp; ${country}</p>
+        </div>
+    `
+}
+
+function weatherTemplate(tempF, tempC, tempLowF, tempLowC, tempHighF, tempHighC, forecast, forecastDetails, windMPH, windKMPH, humidity) {
+    return `
+        <div class="card p-4 gap-4 shadow-lg rounded">
+            <div class="row px-2 gap-4">
+                <div class="col card bg-success text-white">
+                    <div class="row">
+                        <div class="col d-flex align-items-center ps-5">
+                            <h2><strong>Current</strong></h2>
+                        </div>
+                        <div class="col pt-3">
+                            <p class="text-center fs-4">${tempF} &nbsp; <strong>°F</strong></p>
+                            <p class="text-center fs-4">${tempC} &nbsp; <strong>°C</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col card bg-info text-white">
+                    <div class="row">
+                        <div class="col d-flex align-items-center ps-5">
+                            <h2><strong>Low</strong></h2>
+                        </div>
+                        <div class="col pt-3">
+                            <p class="text-center fs-4">${tempLowF} &nbsp; <strong>°F</strong></p>
+                            <p class="text-center fs-4">${tempLowC} &nbsp; <strong>°C</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col card bg-danger text-white">
+                    <div class="row">
+                        <div class="col d-flex align-items-center ps-5">
+                            <h2><strong>High</strong></h2>
+                        </div>
+                        <div class="col pt-3">
+                            <p class="text-center fs-4">${tempHighF} &nbsp; <strong>°F</strong></p>
+                            <p class="text-center fs-4">${tempHighC} &nbsp; <strong>°C</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row px-2 gap-4">
+                <div class="col card bg-warning">
+                    <div class="row" id="fore">
+                        <div class="col d-flex align-items-center ps-5">
+                            <h2><strong>Forecast</strong></h2>
+                        </div>
+                        <div class="col">
+                            <p class="text-center fs-4">${forecast}</p>
+                            <p class="text-center fs-6">(${forecastDetails})</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col card bg-secondary text-white">
+                    <div class="row">
+                        <div class="col d-flex align-items-center ps-5">
+                            <h2><strong>Wind</strong></h2>
+                        </div>
+                        <div class="col pt-3">
+                            <p class="text-center fs-4">${windMPH} &nbsp; <strong>mi/hr</strong></p>
+                            <p class="text-center fs-4">${windKMPH} &nbsp; <strong>km/hr</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col card bg-primary text-white">
+                    <div class="row" id="humid">
+                        <div class="col ps-5">
+                            <h2><strong>Humidity</strong></h2>
+                        </div>
+                        <div class="col">
+                            <p class="text-center fs-4">${humidity} &nbsp; <strong>%</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `
+}
+
 const getCityWeather = async function(city) {
     try{
         const locationResponse = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`)
@@ -84,12 +182,7 @@ const getCityWeather = async function(city) {
         console.log('ERROR! ERROR! ERROR!')
         console.log(err)
     
-        locationEl.innerHTML = `
-            <div class="card col-4 py-3 gap-1 shadow-lg rounded">
-                <h2><strong>Oops!</strong></h2>
-                <p>Looks like there was an error, please try again with a different search query.</p>
-            </div>
-        `
+        locationEl.innerHTML = errorTemplate
     }
 }
 
@@ -121,12 +214,7 @@ const getZipWeather = async function(zip) {
         console.log('ERROR! ERROR! ERROR!')
         console.log(err)
 
-        locationEl.innerHTML = `
-            <div class="card col-4 py-3 gap-1 shadow-lg rounded">
-                <h2><strong>Oops!</strong></h2>
-                <p>Looks like there was an error, please try again with a different search query.</p>
-            </div>
-        `
+        locationEl.innerHTML = errorTemplate
     }
 }
 
@@ -142,91 +230,9 @@ cityFormEl.addEventListener('submit', async (ev) => {
 
     await getCityWeather(info.cityName)
 
-    locationEl.innerHTML = `
-        <div class="card col-4 py-3 gap-1 shadow-lg rounded">
-            <h2><strong>${info.cityName}</strong></h2>
-            <p>Country: &nbsp; ${info.country}</p>
-        </div>
-    `
+    locationEl.innerHTML = locationTemplate(info.cityName, info.country)
 
-    weatherEl.innerHTML = `
-        <div class="card p-4 gap-4 shadow-lg rounded">
-            <div class="row px-2 gap-4">
-                <div class="col card bg-success text-white">
-                    <div class="row">
-                        <div class="col d-flex align-items-center ps-5">
-                            <h2><strong>Current</strong></h2>
-                        </div>
-                        <div class="col pt-3">
-                            <p class="text-center fs-4">${info.tempF} &nbsp; <strong>°F</strong></p>
-                            <p class="text-center fs-4">${info.tempC} &nbsp; <strong>°C</strong></p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col card bg-info text-white">
-                    <div class="row">
-                        <div class="col d-flex align-items-center ps-5">
-                            <h2><strong>Low</strong></h2>
-                        </div>
-                        <div class="col pt-3">
-                            <p class="text-center fs-4">${info.tempLowF} &nbsp; <strong>°F</strong></p>
-                            <p class="text-center fs-4">${info.tempLowC} &nbsp; <strong>°C</strong></p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col card bg-danger text-white">
-                    <div class="row">
-                        <div class="col d-flex align-items-center ps-5">
-                            <h2><strong>High</strong></h2>
-                        </div>
-                        <div class="col pt-3">
-                            <p class="text-center fs-4">${info.tempHighF} &nbsp; <strong>°F</strong></p>
-                            <p class="text-center fs-4">${info.tempHighC} &nbsp; <strong>°C</strong></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row px-2 gap-4">
-                <div class="col card bg-warning">
-                    <div class="row" id="fore">
-                        <div class="col d-flex align-items-center ps-5">
-                            <h2><strong>Forecast</strong></h2>
-                        </div>
-                        <div class="col">
-                            <p class="text-center fs-4">${info.forecast}</p>
-                            <p class="text-center fs-6">(${info.forecastDetails})</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col card bg-secondary text-white">
-                    <div class="row">
-                        <div class="col d-flex align-items-center ps-5">
-                            <h2><strong>Wind</strong></h2>
-                        </div>
-                        <div class="col pt-3">
-                            <p class="text-center fs-4">${info.windMPH} &nbsp; <strong>mi/hr</strong></p>
-                            <p class="text-center fs-4">${info.windKMPH} &nbsp; <strong>km/hr</strong></p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col card bg-primary text-white">
-                    <div class="row" id="humid">
-                        <div class="col ps-5">
-                            <h2><strong>Humidity</strong></h2>
-                        </div>
-                        <div class="col">
-                            <p class="text-center fs-4">${info.humidity} &nbsp; <strong>%</strong></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `
+    weatherEl.innerHTML = weatherTemplate(info.tempF, info.tempC, info.tempLowF, info.tempLowC, info.tempHighF, info.tempHighC, info.forecast, info.forecastDetails, info.windMPH, info.windKMPH, info.humidity)
 
     cityInput.value = ''
     zipInput.value = ''
@@ -243,91 +249,9 @@ zipFormEl.addEventListener('submit', async (ev) => {
 
     await getZipWeather(info.zipCode)
 
-    locationEl.innerHTML = `
-        <div class="card col-4 py-3 gap-1 shadow-lg rounded">
-            <h2><strong>${info.cityName}</strong></h2>
-            <p>Country: &nbsp; ${info.country}</p>
-        </div>
-    `
+    locationEl.innerHTML = locationTemplate(info.cityName, info.country)
 
-    weatherEl.innerHTML = `
-        <div class="card p-4 gap-4 shadow-lg rounded">
-            <div class="row px-2 gap-4">
-                <div class="col card bg-success text-white">
-                    <div class="row">
-                        <div class="col d-flex align-items-center ps-5">
-                            <h2><strong>Current</strong></h2>
-                        </div>
-                        <div class="col pt-3">
-                            <p class="text-center fs-4">${info.tempF} &nbsp; <strong>°F</strong></p>
-                            <p class="text-center fs-4">${info.tempC} &nbsp; <strong>°C</strong></p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col card bg-info text-white">
-                    <div class="row">
-                        <div class="col d-flex align-items-center ps-5">
-                            <h2><strong>Low</strong></h2>
-                        </div>
-                        <div class="col pt-3">
-                            <p class="text-center fs-4">${info.tempLowF} &nbsp; <strong>°F</strong></p>
-                            <p class="text-center fs-4">${info.tempLowC} &nbsp; <strong>°C</strong></p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col card bg-danger text-white">
-                    <div class="row">
-                        <div class="col d-flex align-items-center ps-5">
-                            <h2><strong>High</strong></h2>
-                        </div>
-                        <div class="col pt-3">
-                            <p class="text-center fs-4">${info.tempHighF} &nbsp; <strong>°F</strong></p>
-                            <p class="text-center fs-4">${info.tempHighC} &nbsp; <strong>°C</strong></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row px-2 gap-4">
-                <div class="col card bg-warning">
-                    <div class="row" id="fore">
-                        <div class="col d-flex align-items-center ps-5">
-                            <h2><strong>Forecast</strong></h2>
-                        </div>
-                        <div class="col">
-                            <p class="text-center fs-4">${info.forecast}</p>
-                            <p class="text-center fs-6">(${info.forecastDetails})</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col card bg-secondary text-white">
-                    <div class="row">
-                        <div class="col d-flex align-items-center ps-5">
-                            <h2><strong>Wind</strong></h2>
-                        </div>
-                        <div class="col pt-3">
-                            <p class="text-center fs-4">${info.windMPH} &nbsp; <strong>mi/hr</strong></p>
-                            <p class="text-center fs-4">${info.windKMPH} &nbsp; <strong>km/hr</strong></p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col card bg-primary text-white">
-                    <div class="row" id="humid">
-                        <div class="col ps-5">
-                            <h2><strong>Humidity</strong></h2>
-                        </div>
-                        <div class="col">
-                            <p class="text-center fs-4">${info.humidity} &nbsp; <strong>%</strong></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `
+    weatherEl.innerHTML = weatherTemplate(info.tempF, info.tempC, info.tempLowF, info.tempLowC, info.tempHighF, info.tempHighC, info.forecast, info.forecastDetails, info.windMPH, info.windKMPH, info.humidity)
 
     cityInput.value = ''
     zipInput.value = ''
