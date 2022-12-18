@@ -68,17 +68,17 @@ const getCityWeather = async function(city) {
 
         const weatherResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`)
         const weatherData = await weatherResponse.json()
-        info.tempF = convF(weatherData.main.temp).toFixed(2)
-        info.tempC = convC(weatherData.main.temp).toFixed(2)
-        info.tempLowF = convF(weatherData.main.temp_min).toFixed(2)
-        info.tempLowC = convF(weatherData.main.temp_min).toFixed(2)
-        info.tempHighF = convF(weatherData.main.temp_max).toFixed(2)
-        info.tempHighC = convC(weatherData.main.temp_max).toFixed(2)
+        info.tempF = convF(weatherData.main.temp).toFixed(1)
+        info.tempC = convC(weatherData.main.temp).toFixed(1)
+        info.tempLowF = convF(weatherData.main.temp_min).toFixed(1)
+        info.tempLowC = convC(weatherData.main.temp_min).toFixed(1)
+        info.tempHighF = convF(weatherData.main.temp_max).toFixed(1)
+        info.tempHighC = convC(weatherData.main.temp_max).toFixed(1)
         info.forecast = weatherData.weather[0].main
         info.forecastDetails = toTitleCase(weatherData.weather[0].description)
-        info.humidity = weatherData.main.humidity.toFixed(2)
-        info.windMPH = convMPH(weatherData.wind.speed).toFixed(2)
-        info.windKMPH = convKMPH(weatherData.wind.speed).toFixed(2)
+        info.humidity = weatherData.main.humidity.toFixed(1)
+        info.windMPH = convMPH(weatherData.wind.speed).toFixed(1)
+        info.windKMPH = convKMPH(weatherData.wind.speed).toFixed(1)
     }
     catch (err) {
         console.log('ERROR! ERROR! ERROR!')
@@ -105,17 +105,17 @@ const getZipWeather = async function(zip) {
 
         const weatherResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`)
         const weatherData = await weatherResponse.json()
-        info.tempF = convF(weatherData.main.temp).toFixed(2)
-        info.tempC = convC(weatherData.main.temp).toFixed(2)
-        info.tempLowF = convF(weatherData.main.temp_min).toFixed(2)
-        info.tempLowC = convF(weatherData.main.temp_min).toFixed(2)
-        info.tempHighF = convF(weatherData.main.temp_max).toFixed(2)
-        info.tempHighC = convC(weatherData.main.temp_max).toFixed(2)
+        info.tempF = convF(weatherData.main.temp).toFixed(1)
+        info.tempC = convC(weatherData.main.temp).toFixed(1)
+        info.tempLowF = convF(weatherData.main.temp_min).toFixed(1)
+        info.tempLowC = convC(weatherData.main.temp_min).toFixed(1)
+        info.tempHighF = convF(weatherData.main.temp_max).toFixed(1)
+        info.tempHighC = convC(weatherData.main.temp_max).toFixed(1)
         info.forecast = weatherData.weather[0].main
         info.forecastDetails = toTitleCase(weatherData.weather[0].description)
-        info.humidity = weatherData.main.humidity.toFixed(2)
-        info.windMPH = convMPH(weatherData.wind.speed).toFixed(2)
-        info.windKMPH = convKMPH(weatherData.wind.speed).toFixed(2)
+        info.humidity = weatherData.main.humidity.toFixed(1)
+        info.windMPH = convMPH(weatherData.wind.speed).toFixed(1)
+        info.windKMPH = convKMPH(weatherData.wind.speed).toFixed(1)
     }
     catch (err) {
         console.log('ERROR! ERROR! ERROR!')
@@ -196,8 +196,8 @@ cityFormEl.addEventListener('submit', async (ev) => {
                             <h2><strong>Forecast</strong></h2>
                         </div>
                         <div class="col">
-                            <p class="text-center fs-4"><strong>${info.forecast}</strong></p>
-                            <p class="text-center fs-6">${info.forecastDetails}</p>
+                            <p class="text-center fs-4">${info.forecast}</p>
+                            <p class="text-center fs-6">(${info.forecastDetails})</p>
                         </div>
                     </div>
                 </div>
@@ -297,8 +297,8 @@ zipFormEl.addEventListener('submit', async (ev) => {
                             <h2><strong>Forecast</strong></h2>
                         </div>
                         <div class="col">
-                            <p class="text-center fs-4"><strong>${info.forecast}</strong></p>
-                            <p class="text-center fs-6">${info.forecastDetails}</p>
+                            <p class="text-center fs-4">${info.forecast}</p>
+                            <p class="text-center fs-6">(${info.forecastDetails})</p>
                         </div>
                     </div>
                 </div>
