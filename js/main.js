@@ -1,14 +1,14 @@
 // FORMATS
 // https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
 
-// http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
+// https://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
 
-// http://api.openweathermap.org/geo/1.0/zip?zip={zip code},{country code}&appid={API key}
+// https://api.openweathermap.org/geo/1.0/zip?zip={zip code},{country code}&appid={API key}
 
 // EXAMPLES
-// http://api.openweathermap.org/geo/1.0/direct?q=houston,tx,us&limit=5&appid=5a16a8c096c6d9a7ad2dc7550df0b025
+// https://api.openweathermap.org/geo/1.0/direct?q=houston,tx,us&limit=5&appid=5a16a8c096c6d9a7ad2dc7550df0b025
 
-// http://api.openweathermap.org/geo/1.0/direct?q=London&limit=5&appid=5a16a8c096c6d9a7ad2dc7550df0b025
+// https://api.openweathermap.org/geo/1.0/direct?q=London&limit=5&appid=5a16a8c096c6d9a7ad2dc7550df0b025
 
 const apiKey = '5a16a8c096c6d9a7ad2dc7550df0b025'
 
@@ -157,14 +157,14 @@ function weatherTemplate(tempF, tempC, tempLowF, tempLowC, tempHighF, tempHighC,
 
 const getCityWeather = async function(city) {
     try{
-        const locationResponse = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`)
+        const locationResponse = await fetch(`//api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`)
         const locationData = await locationResponse.json()
 
         const lat = locationData[0].lat
         const lon = locationData[0].lon
         info.country = locationData[0].country
 
-        const weatherResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`)
+        const weatherResponse = await fetch(`//api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`)
         const weatherData = await weatherResponse.json()
         info.tempF = convF(weatherData.main.temp).toFixed(1)
         info.tempC = convC(weatherData.main.temp).toFixed(1)
@@ -188,7 +188,7 @@ const getCityWeather = async function(city) {
 
 const getZipWeather = async function(zip) {
     try{
-        const locationResponse = await fetch(`http://api.openweathermap.org/geo/1.0/zip?zip=${zip}&appid=${apiKey}`)
+        const locationResponse = await fetch(`//api.openweathermap.org/geo/1.0/zip?zip=${zip}&appid=${apiKey}`)
         const locationData = await locationResponse.json()
 
         const lat = locationData.lat
@@ -196,7 +196,7 @@ const getZipWeather = async function(zip) {
         info.cityName = locationData.name
         info.country = locationData.country
 
-        const weatherResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`)
+        const weatherResponse = await fetch(`//api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`)
         const weatherData = await weatherResponse.json()
         info.tempF = convF(weatherData.main.temp).toFixed(1)
         info.tempC = convC(weatherData.main.temp).toFixed(1)
